@@ -23,7 +23,7 @@ class Discord:
 
     core: sdk.IDiscordCore = None
 
-    def __init__(self, client_id: int, flags: CreateFlags):
+    def __init__(self, client_id: int, flags: CreateFlags, dll_base_path: str):
         self._garbage = []
 
         self._activity_manager = ActivityManager()
@@ -61,7 +61,7 @@ class Discord:
 
         pointer = ctypes.POINTER(sdk.IDiscordCore)()
 
-        result = Result(sdk.DiscordCreate(version, ctypes.pointer(params), ctypes.pointer(pointer)))
+        result = Result(sdk.build_sdk(dll_base_path)(version, ctypes.pointer(params), ctypes.pointer(pointer)))
         if result != Result.ok:
             raise get_exception(result)
 
